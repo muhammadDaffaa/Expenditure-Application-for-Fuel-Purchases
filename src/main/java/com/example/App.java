@@ -22,12 +22,11 @@ public class App {
     public static void main(String[] args) {
         try {
             while (!ConnectorDB.connect().isClosed()) {
-                System.out.println("\n");
 
                 System.out.println("Connected to Database !!!");
                 showMenu();
             }
-            // stmt.close();
+
             ConnectorDB.connect().close();
 
         } catch (Exception e) {
@@ -182,41 +181,32 @@ public class App {
             long createdAtTime = now.getEpochSecond();
             long updatedAtTime = now.getEpochSecond();
 
-            // SELECT QUERY
-            String selectQuery = ("SELECT " + selectedType + " FROM "
-                    + selectedColumnFuelStation
-                    + " ORDER BY created_at DESC LIMIT 1");
-
-            // simpan data
-            rs = stmt.executeQuery(selectQuery);
-
+            // Query Select Database
             String sqlQuery = ("SELECT " + selectedType + " FROM "
                     + selectedColumnFuelStation
                     + " ORDER BY created_at DESC LIMIT 1");
-
-            // try {
-            // PreparedStatement pr = ConnectorDB.connect().prepareStatement(sqlQuery);
-            // ResultSet rs = pr.executeQuery();
-            // if (rs.next()) {
-            // as.getFuelLiter(rs.getInt(selectedType));
-            // float resultFuelPrice = dayFuelCost.floatValue() / getFuelPrice;
-            // }
-
-            // } catch (Exception e) {
-
-            // }
+            PreparedStatement pr = ConnectorDB.connect().prepareStatement(sqlQuery);
+            ResultSet rs = pr.executeQuery();
 
             if (rs.next()) {
                 float getFuelPrice = rs.getInt(selectedType);
                 float resultFuelPrice = dayFuelCost.floatValue() / getFuelPrice;
 
-                String sql = "INSERT INTO fuelCosts (fuel_station,fuel_type,fuel_cost, fuel_liter, created_at, updated_at) VALUE ('%s','%s','%s','%s','%s', '%s')";
-                sql = String.format(sql, fuelStation, fuelType, dayFuelCost, resultFuelPrice, createdAtTime,
-                        updatedAtTime);
+                // Query Insert Database
+                String sql = "INSERT INTO fuelCosts (fuel_station,fuel_type,fuel_cost,fuel_liter,created_at,updated_at) VALUES (?,?,?,?,?,?)";
 
-                stmt.execute(sql);
-                if (stmt.getUpdateCount() != -1) {
+                PreparedStatement ExecuteInsertQuery = ConnectorDB.connect().prepareStatement(sql);
+                ExecuteInsertQuery.setString(1, fuelStation);
+                ExecuteInsertQuery.setString(2, fuelType);
+                ExecuteInsertQuery.setBigDecimal(3, dayFuelCost);
+                ExecuteInsertQuery.setFloat(4, resultFuelPrice);
+                ExecuteInsertQuery.setLong(5, createdAtTime);
+                ExecuteInsertQuery.setLong(6, updatedAtTime);
+
+                int status = ExecuteInsertQuery.executeUpdate();
+                if (status > 0) {
                     System.out.println("Data berhasil ditambahkan !!!");
+                    ConnectorDB.connect().close();
                 }
             }
 

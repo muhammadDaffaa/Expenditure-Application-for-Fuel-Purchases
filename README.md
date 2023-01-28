@@ -1,5 +1,5 @@
 # Expenditure Console Application for Fuel Purchases
-Making CONSOLE APPLICATION - CRUD NATIVE DATABASE with JAVA programming language and using MAVENb. 
+Making CONSOLE APPLICATION - CRUD NATIVE DATABASE with JAVA programming language and using MAVEN. 
 This project already uses preparedstatement. Over time this project will continue to grow until it becomes an API.<br>
 
 # JAR yang digunakan : 

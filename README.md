@@ -1,7 +1,6 @@
 # Expenditure Console Application for Fuel Purchases
-Pembuatan CONSOLE APPLICATION - CRUD NATIVE DATABASE dengan bahasa pemograman JAVA dan menggunakan MAVEN. 
-Projek ini sudah menggunakan preparedstatement. 
-Seiring berjalannya waktu projek ini akan terus berkembang hingga menjadi sebuah API.<br>
+Making CONSOLE APPLICATION - CRUD NATIVE DATABASE with JAVA programming language and using MAVENb. 
+This project already uses preparedstatement. Over time this project will continue to grow until it becomes an API.<br>
 
 # JAR yang digunakan : 
-> Connector J :  https://mvnrepository.com/artifact/com.mysql/mysql-connector-j // Koneksi JAVA to MySql <br> 
+> Connector J :  https://mvnrepository.com/artifact/com.mysql/mysql-connector-j // Connection JAVA to MySql Database <br> 

@@ -1,5 +1,6 @@
 package com.example;
 
+// import java.time.Stop;;
 import java.util.Scanner;
 import java.math.BigDecimal;
 // import java.sql.Connection;
@@ -9,11 +10,16 @@ import java.sql.Statement;
 import java.time.Instant;
 
 public class App {
+
     static Instant now = Instant.now();
     static Scanner input = new Scanner(System.in);;
-    static ResultSet rs;
+
     static AllData as;
     static Statement stmt;
+    static PreparedStatement pr;
+    static ResultSet rs;
+    static Boolean statusQuery;
+
     // Declare Variables
     static String fuelStation = "", fuelType = "", selectedType = "", selectedColumnFuelStation = "";
     static int fuelTypeChoice, fuelStationChoice;
@@ -22,7 +28,7 @@ public class App {
     public static void main(String[] args) {
         try {
             while (!ConnectorDB.connect().isClosed()) {
-
+                System.out.println("\n");
                 System.out.println("Connected to Database !!!");
                 showMenu();
             }
@@ -63,7 +69,7 @@ public class App {
                     // updateDataPetrolCosts();
                     break;
                 case 4:
-                    // deleteDataPetrolCosts();
+                    deleteDataPetrolCosts();
                     break;
                 case 5:
                     // insertFuelStationPrices();
@@ -112,6 +118,7 @@ public class App {
                 System.out.print("\n");
 
                 while (fuelTypeChoice < 1 || fuelTypeChoice > 3) {
+                    System.out.print("\n");
                     System.out.println("Pilih pengisian tipe bahan bakar Pertamina: ");
                     System.out.println("1. Pertalite");
                     System.out.println("2. Pertamax");
@@ -153,6 +160,7 @@ public class App {
                 System.out.print("\n");
 
                 while (fuelTypeChoice < 1 || fuelTypeChoice > 2) {
+                    System.out.print("\n");
                     System.out.println("Pilih pengisian tipe bahan bakar Shell : ");
                     System.out.println("1. Super");
                     System.out.println("2. V Power");
@@ -222,8 +230,8 @@ public class App {
         String sqlQuery = "SELECT * FROM fuelCosts DESCY ORDER BY id_fuel DESC";
 
         try {
-            PreparedStatement pr = ConnectorDB.connect().prepareStatement(sqlQuery);
-            ResultSet rs = pr.executeQuery();
+            pr = ConnectorDB.connect().prepareStatement(sqlQuery);
+            rs = pr.executeQuery();
 
             System.out.println("+--------------------------------+");
             System.out.println("|    PENGELUARAN BIAYA BENSIN    |");
@@ -231,6 +239,7 @@ public class App {
 
             while (rs.next()) {
                 as = new AllData();
+                as.setIdFuel(rs.getInt("id_fuel"));
                 as.setFuelCost(rs.getBigDecimal("fuel_cost"));
                 as.setFuelLiter(rs.getFloat("fuel_liter"));
                 as.setCreatedAtTime(rs.getInt("created_at"));
@@ -239,10 +248,58 @@ public class App {
                 System.out.printf("Pengeluaran pada tanggal %s sebanyak Rp. %s untuk %s liter %n", date,
                         as.getFuelCost(), as.getFuelLiter());
             }
-            pr.close();
-            rs.close();
+
+            ConnectorDB.connect().close();
+
         } catch (Exception e) {
             e.getMessage();
+        }
+    }
+
+    static void deleteDataPetrolCosts() {
+
+        String sqlSelect = "SELECT * FROM fuelCosts DESCY ORDER BY id_fuel DESC";
+
+        try {
+            pr = ConnectorDB.connect().prepareStatement(sqlSelect);
+            rs = pr.executeQuery();
+
+            System.out.println("+---------------------------------+");
+            System.out.println("| DAFTAR PENGELUARAN BIAYA BENSIN |");
+            System.out.println("+---------------------------------+");
+
+            while (rs.next()) {
+                as = new AllData();
+                as.setIdFuel(rs.getInt("id_fuel"));
+
+                as.setFuelCost(rs.getBigDecimal("fuel_cost"));
+                as.setFuelLiter(rs.getFloat("fuel_liter"));
+                as.setCreatedAtTime(rs.getInt("created_at"));
+                String date = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+                        .format(new java.util.Date(as.getCreatedAtTime() * 1000));
+                System.out.printf("Id %s Pengeluaran pada tanggal %s sebanyak Rp. %s untuk %s liter %n",
+                        as.getIdFuel(),
+                        date,
+                        as.getFuelCost(), as.getFuelLiter());
+            }
+            // Get Data Id From User
+            System.out.print("ID yang mau dihapus: ");
+            int idFuel = input.nextInt();
+
+            // Query Delete
+            String sqlQuery = "DELETE FROM fuelCosts WHERE id_fuel = ?";
+            pr = ConnectorDB.connect().prepareStatement(sqlQuery);
+            pr.setInt(1, idFuel);
+            // execute the preparedstatement
+            // statusQuery = pr.execute();
+
+            if (pr.executeUpdate() > 0) {
+                System.out.println("Data telah terhapus...");
+                ConnectorDB.connect().close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

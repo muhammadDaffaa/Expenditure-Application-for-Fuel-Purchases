@@ -193,8 +193,8 @@ public class App {
             String sqlQuery = ("SELECT " + selectedType + " FROM "
                     + selectedColumnFuelStation
                     + " ORDER BY created_at DESC LIMIT 1");
-            PreparedStatement pr = ConnectorDB.connect().prepareStatement(sqlQuery);
-            ResultSet rs = pr.executeQuery();
+            pr = ConnectorDB.connect().prepareStatement(sqlQuery);
+            rs = pr.executeQuery();
 
             if (rs.next()) {
                 float getFuelPrice = rs.getInt(selectedType);
@@ -203,15 +203,15 @@ public class App {
                 // Query Insert Database
                 String sql = "INSERT INTO fuelCosts (fuel_station,fuel_type,fuel_cost,fuel_liter,created_at,updated_at) VALUES (?,?,?,?,?,?)";
 
-                PreparedStatement ExecuteInsertQuery = ConnectorDB.connect().prepareStatement(sql);
-                ExecuteInsertQuery.setString(1, fuelStation);
-                ExecuteInsertQuery.setString(2, fuelType);
-                ExecuteInsertQuery.setBigDecimal(3, dayFuelCost);
-                ExecuteInsertQuery.setFloat(4, resultFuelPrice);
-                ExecuteInsertQuery.setLong(5, createdAtTime);
-                ExecuteInsertQuery.setLong(6, updatedAtTime);
+                pr = ConnectorDB.connect().prepareStatement(sql);
+                pr.setString(1, fuelStation);
+                pr.setString(2, fuelType);
+                pr.setBigDecimal(3, dayFuelCost);
+                pr.setFloat(4, resultFuelPrice);
+                pr.setLong(5, createdAtTime);
+                pr.setLong(6, updatedAtTime);
 
-                int status = ExecuteInsertQuery.executeUpdate();
+                int status = pr.executeUpdate();
                 if (status > 0) {
                     System.out.println("Data berhasil ditambahkan !!!");
                     ConnectorDB.connect().close();
@@ -227,26 +227,28 @@ public class App {
     // Show Data
     static void showDataPetrolCosts() {
 
-        String sqlQuery = "SELECT * FROM fuelCosts DESCY ORDER BY id_fuel DESC";
+        String SQL_SELECT = "SELECT * FROM fuelCosts DESCY ORDER BY id_fuel DESC";
 
         try {
-            pr = ConnectorDB.connect().prepareStatement(sqlQuery);
+            pr = ConnectorDB.connect().prepareStatement(SQL_SELECT);
             rs = pr.executeQuery();
+            String date = "";
 
-            System.out.println("+--------------------------------+");
-            System.out.println("|    PENGELUARAN BIAYA BENSIN    |");
-            System.out.println("+--------------------------------+");
+            System.out.println("+---------------------------------+");
+            System.out.println("| DAFTAR PENGELUARAN BIAYA BENSIN |");
+            System.out.println("+---------------------------------+");
 
             while (rs.next()) {
                 as = new AllData();
                 as.setIdFuel(rs.getInt("id_fuel"));
+                as.setFuelStation(rs.getString("fuel_station"));
+                as.setFuelType(rs.getString("fuel_type"));
                 as.setFuelCost(rs.getBigDecimal("fuel_cost"));
                 as.setFuelLiter(rs.getFloat("fuel_liter"));
                 as.setCreatedAtTime(rs.getInt("created_at"));
-                String date = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+                date = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
                         .format(new java.util.Date(as.getCreatedAtTime() * 1000));
-                System.out.printf("Pengeluaran pada tanggal %s sebanyak Rp. %s untuk %s liter %n", date,
-                        as.getFuelCost(), as.getFuelLiter());
+                printFullTable(0, as.getFuelStation(), as.getFuelType(), as.getFuelCost(), as.getFuelLiter(), date);
             }
 
             ConnectorDB.connect().close();
@@ -256,12 +258,14 @@ public class App {
         }
     }
 
+    // Delete Data
     static void deleteDataPetrolCosts() {
 
-        String sqlSelect = "SELECT * FROM fuelCosts DESCY ORDER BY id_fuel DESC";
+        String SQL_SELECT = "SELECT * FROM fuelCosts DESCY ORDER BY id_fuel DESC"; // Query SELECT
+        String SQL_DELETE = "DELETE FROM fuelCosts WHERE id_fuel = ?"; // Query DELETE
 
         try {
-            pr = ConnectorDB.connect().prepareStatement(sqlSelect);
+            pr = ConnectorDB.connect().prepareStatement(SQL_SELECT);
             rs = pr.executeQuery();
 
             System.out.println("+---------------------------------+");
@@ -271,27 +275,24 @@ public class App {
             while (rs.next()) {
                 as = new AllData();
                 as.setIdFuel(rs.getInt("id_fuel"));
-
+                as.setFuelStation(rs.getString("fuel_station"));
+                as.setFuelType(rs.getString("fuel_type"));
                 as.setFuelCost(rs.getBigDecimal("fuel_cost"));
                 as.setFuelLiter(rs.getFloat("fuel_liter"));
                 as.setCreatedAtTime(rs.getInt("created_at"));
                 String date = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
                         .format(new java.util.Date(as.getCreatedAtTime() * 1000));
-                System.out.printf("Id %s Pengeluaran pada tanggal %s sebanyak Rp. %s untuk %s liter %n",
-                        as.getIdFuel(),
-                        date,
-                        as.getFuelCost(), as.getFuelLiter());
+                printFullTable(as.getIdFuel(), as.getFuelStation(), as.getFuelType(), as.getFuelCost(),
+                        as.getFuelLiter(), date);
             }
+
+            System.out.println();
             // Get Data Id From User
-            System.out.print("ID yang mau dihapus: ");
+            System.out.print("Enter the id for the data to be deleted : ");
             int idFuel = input.nextInt();
 
-            // Query Delete
-            String sqlQuery = "DELETE FROM fuelCosts WHERE id_fuel = ?";
-            pr = ConnectorDB.connect().prepareStatement(sqlQuery);
+            pr = ConnectorDB.connect().prepareStatement(SQL_DELETE);
             pr.setInt(1, idFuel);
-            // execute the preparedstatement
-            // statusQuery = pr.execute();
 
             if (pr.executeUpdate() > 0) {
                 System.out.println("Data telah terhapus...");
@@ -302,4 +303,41 @@ public class App {
             e.printStackTrace();
         }
     }
+
+    // Update Data
+    static void updateDataPetrolCosts() {
+        String SQL_UPDATE = "UPDATE fuelCosts SET fuel_station=?, fuel_type=?, fuel_cost=?, fuel_liter=?, updated_at=? WHERE id_fuel=?";
+        String SQL_SELECT = "SELECT * FROM fuelCosts";
+
+        try {
+
+            pr = ConnectorDB.connect().prepareStatement(SQL_SELECT);
+            rs = pr.executeQuery();
+
+            // pr.setString(1, stockLevel);
+            // pr.setInt(2, recievedStock);
+            // pr.setString(3, averageUsage);
+            // pr.setInt(4, partNumber);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    static void printFullTable(int getId, String getFuelStation, String getFuelType, BigDecimal getFuelCost,
+            Float getFuelLiter, String getTimestamp) {
+
+        if (getId != 0) {
+            System.out.println();
+            System.out.printf("Id %s\t - %s Top Up at %s station as much Rp. %s for %s liters on %s", getId,
+                    getFuelType, getFuelStation, getFuelCost, getFuelLiter, getTimestamp);
+        } else {
+            System.out.println();
+            System.out.printf("- %s Top Up at %s station as much Rp. %s for %s liters on %s",
+                    getFuelType, getFuelStation, getFuelCost, getFuelLiter, getTimestamp);
+        }
+
+    }
+
 }

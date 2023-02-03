@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
+// import java.util.Date;
 
 public class App {
 
@@ -19,6 +20,11 @@ public class App {
     static PreparedStatement pr;
     static ResultSet rs;
     static Boolean statusQuery;
+
+    // static long endSecond = System.currentTimeMillis();
+    // static long startSecond = System.currentTimeMillis();
+    // static Date dataDate = new Date();
+    // System.out.println("Second of the minute is : "+d.getSeconds());
 
     // Declare Variables
     static String fuelStation = "", fuelType = "", selectedType = "", selectedColumnFuelStation = "";
@@ -87,6 +93,7 @@ public class App {
 
     // Insert Data
     static void insertDataPetrolCosts() {
+        long startSecond = System.currentTimeMillis();
         try {
             // ambil input dari user
             System.out.println("Pilih pengisian stasiun bahan bakar: ");
@@ -215,6 +222,12 @@ public class App {
                 if (status > 0) {
                     System.out.println("Data berhasil ditambahkan !!!");
                     ConnectorDB.connect().close();
+                    System.out.println("\n");
+
+                    // finding the time difference and converting it into seconds
+                    long endSecond = System.currentTimeMillis();
+                    float sec = (endSecond - startSecond) / 1000F;
+                    System.out.println("Elapsed time in seconds " + sec);
                 }
             }
 
@@ -226,6 +239,7 @@ public class App {
 
     // Show Data
     static void showDataPetrolCosts() {
+        long startSecond = System.currentTimeMillis();
 
         String SQL_SELECT = "SELECT * FROM fuelCosts DESCY ORDER BY id_fuel DESC";
 
@@ -253,6 +267,12 @@ public class App {
 
             ConnectorDB.connect().close();
 
+            System.out.println("\n");
+            // finding the time difference and converting it into seconds
+            long endSecond = System.currentTimeMillis();
+            float sec = (endSecond - startSecond) / 1000F;
+            System.out.println("Elapsed time in seconds " + sec);
+
         } catch (Exception e) {
             e.getMessage();
         }
@@ -260,6 +280,7 @@ public class App {
 
     // Delete Data
     static void deleteDataPetrolCosts() {
+        long startSecond = System.currentTimeMillis();
 
         String SQL_SELECT = "SELECT * FROM fuelCosts DESCY ORDER BY id_fuel DESC"; // Query SELECT
         String SQL_DELETE = "DELETE FROM fuelCosts WHERE id_fuel = ?"; // Query DELETE
@@ -297,6 +318,11 @@ public class App {
             if (pr.executeUpdate() > 0) {
                 System.out.println("Data telah terhapus...");
                 ConnectorDB.connect().close();
+                System.out.println("\n");
+                // finding the time difference and converting it into seconds
+                long endSecond = System.currentTimeMillis();
+                float sec = (endSecond - startSecond) / 1000F;
+                System.out.println("Elapsed time in seconds " + sec);
             }
 
         } catch (Exception e) {
@@ -306,6 +332,8 @@ public class App {
 
     // Update Data
     static void updateDataPetrolCosts() {
+        long startSecond = System.currentTimeMillis();
+
         String SQL_UPDATE = "UPDATE fuelCosts SET fuel_station=?, fuel_type=?, fuel_cost=?, fuel_liter=?, updated_at=? WHERE id_fuel=?";
         String SQL_SELECT = "SELECT * FROM fuelCosts";
 
@@ -318,7 +346,11 @@ public class App {
             // pr.setInt(2, recievedStock);
             // pr.setString(3, averageUsage);
             // pr.setInt(4, partNumber);
-
+            System.out.println("\n");
+            // finding the time difference and converting it into seconds
+            long endSecond = System.currentTimeMillis();
+            float sec = (endSecond - startSecond) / 1000F;
+            System.out.println("Elapsed time in seconds " + sec);
         } catch (Exception e) {
             e.printStackTrace();
         }

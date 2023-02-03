@@ -1,14 +1,13 @@
 package com.example;
 
-// import java.time.Stop;;
 import java.util.Scanner;
 import java.math.BigDecimal;
-// import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
-// import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App {
 
@@ -20,11 +19,6 @@ public class App {
     static PreparedStatement pr;
     static ResultSet rs;
     static Boolean statusQuery;
-
-    // static long endSecond = System.currentTimeMillis();
-    // static long startSecond = System.currentTimeMillis();
-    // static Date dataDate = new Date();
-    // System.out.println("Second of the minute is : "+d.getSeconds());
 
     // Declare Variables
     static String fuelStation = "", fuelType = "", selectedType = "", selectedColumnFuelStation = "";
@@ -58,7 +52,7 @@ public class App {
         System.out.println("0. Keluar");
         System.out.print("\n");
         System.out.print("PILIHAN> ");
-
+        // input.
         try {
             int pilihan = input.nextInt();
             switch (pilihan) {
@@ -72,7 +66,7 @@ public class App {
                     showDataPetrolCosts();
                     break;
                 case 3:
-                    // updateDataPetrolCosts();
+                    updateDataPetrolCosts();
                     break;
                 case 4:
                     deleteDataPetrolCosts();
@@ -81,6 +75,15 @@ public class App {
                     // insertFuelStationPrices();
                     break;
                 case 6:
+                    // showFuelStationPrices();
+                    break;
+                case 7:
+                    // deleteFuelStationPrices();
+                    break;
+                case 8:
+                    // updateFuelStationPrices();
+                    break;
+                case 9:
                     // exportToExcel();
                     break;
                 default:
@@ -332,15 +335,26 @@ public class App {
 
     // Update Data
     static void updateDataPetrolCosts() {
+        int i = 0;
         long startSecond = System.currentTimeMillis();
 
         String SQL_UPDATE = "UPDATE fuelCosts SET fuel_station=?, fuel_type=?, fuel_cost=?, fuel_liter=?, updated_at=? WHERE id_fuel=?";
         String SQL_SELECT = "SELECT * FROM fuelCosts";
 
+        // List<String> arrDataStation = new ArrayList<String>();
+
+        String[] arrDataStation = { "Fuel Station", "Fuel Type", "Fuel Cost", "Fuel Liter" };
+
         try {
 
             pr = ConnectorDB.connect().prepareStatement(SQL_SELECT);
             rs = pr.executeQuery();
+            System.out.println("What data do you want to update ? ");
+            while (i < arrDataStation.length) {
+
+                System.out.println((i + 1) + " " + arrDataStation[i]);
+                i++;
+            }
 
             // pr.setString(1, stockLevel);
             // pr.setInt(2, recievedStock);

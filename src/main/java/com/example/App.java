@@ -6,8 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 public class App {
 
@@ -27,7 +25,7 @@ public class App {
 
     public static void main(String[] args) {
         try {
-            while (!ConnectorDB.connect().isClosed()) {
+            while (ConnectorDB.connect() != null) {
                 System.out.println("\n");
                 System.out.println("Connected to Database !!!");
                 showMenu();

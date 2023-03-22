@@ -1,0 +1,17 @@
+{
+  "Petrol Station": [
+    {
+      "Pertamina": {
+        "Pertalite": 10000,
+        "Pertamax": 13300,
+        "Pertamax Turbo": 15100
+      }
+    },
+    {
+      "Shell": {
+        "Super": 13990,
+        "V Power": 14890
+      }
+    }
+  ]
+}

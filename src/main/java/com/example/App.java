@@ -29,10 +29,9 @@ public class App {
                 System.out.println("\n");
                 System.out.println("Connected to Database !!!");
                 showMenu();
+
             }
-
             ConnectorDB.connect().close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }

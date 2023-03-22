@@ -1,0 +1,12 @@
+{
+  "Petrol Station": [
+    {
+      "No":1,
+      "Pertamina": ["Pertalite","Pertamax", "Pertamax Turbo"]
+    },
+    {
+      "No": 2,
+      "Shell": ["Super", "V Power" ]
+    }
+  ]
+}

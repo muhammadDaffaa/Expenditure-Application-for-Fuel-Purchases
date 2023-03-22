@@ -1,0 +1,21 @@
+{
+  "Prices Station": [
+    {
+      "Pertamina": {
+        "Pertalite": 10000,
+        "Pertamax": 13300,
+        "Pertamax Turbo": 15100,
+        "created_at": 20,
+        "updated_at": 25
+      }
+    },
+    {
+      "Shell": {
+        "Super": 13990,
+        "V Power": 14890,
+        "created_at": 20,
+        "updated_at": 25
+      }
+    }
+  ]
+}

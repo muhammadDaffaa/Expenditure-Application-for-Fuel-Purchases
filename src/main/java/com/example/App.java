@@ -17,11 +17,16 @@ public class App {
     static PreparedStatement pr;
     static ResultSet rs;
     static Boolean statusQuery;
+    static int selected;
 
     // Declare Variables
     static String fuelStation = "", fuelType = "", selectedType = "", selectedColumnFuelStation = "";
     static int fuelTypeChoice, fuelStationChoice;
     static BigDecimal dayFuelCost;
+
+
+
+    static String[] selectedAction = {"Insert Cost Petrol","Show Cost Petrol","Edit Cost Petrol","Delete Cost Petrol","Insert Price Petrol","Show Price Petrol","Edit Price Petrol","Delete Price Petrol","Export Data"};
 
     public static void main(String[] args) {
         try {
@@ -30,13 +35,13 @@ public class App {
                 System.out.println("Connected to Database !!!");
                 showMenu();
             }
-
             ConnectorDB.connect().close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 
     // Show Menu
     static void showMenu() {
@@ -52,8 +57,8 @@ public class App {
         System.out.print("PILIHAN> ");
         // input.
         try {
-            int pilihan = input.nextInt();
-            switch (pilihan) {
+            selected = input.nextInt();
+            switch (selected) {
                 case 0:
                     System.exit(0);
                     break;
@@ -228,7 +233,7 @@ public class App {
                     // finding the time difference and converting it into seconds
                     long endSecond = System.currentTimeMillis();
                     float sec = (endSecond - startSecond) / 1000F;
-                    System.out.println("Elapsed time in seconds " + sec);
+                    System.out.println("Elapsed time in " + sec+" seconds");
                 }
             }
 
@@ -272,7 +277,7 @@ public class App {
             // finding the time difference and converting it into seconds
             long endSecond = System.currentTimeMillis();
             float sec = (endSecond - startSecond) / 1000F;
-            System.out.println("Elapsed time in seconds " + sec);
+            System.out.println("Elapsed time in " + sec+" seconds");
 
         } catch (Exception e) {
             e.getMessage();
@@ -323,7 +328,7 @@ public class App {
                 // finding the time difference and converting it into seconds
                 long endSecond = System.currentTimeMillis();
                 float sec = (endSecond - startSecond) / 1000F;
-                System.out.println("Elapsed time in seconds " + sec);
+                System.out.println("Elapsed time in " + sec+" seconds");
             }
 
         } catch (Exception e) {
@@ -362,7 +367,7 @@ public class App {
             // finding the time difference and converting it into seconds
             long endSecond = System.currentTimeMillis();
             float sec = (endSecond - startSecond) / 1000F;
-            System.out.println("Elapsed time in seconds " + sec);
+            System.out.println("Elapsed time in " + sec+" seconds");
         } catch (Exception e) {
             e.printStackTrace();
         }

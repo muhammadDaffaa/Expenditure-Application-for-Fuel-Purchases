@@ -6,4 +6,4 @@ This project already uses preparedstatement for MySql Query. Over time this proj
 > Connector J :  https://mvnrepository.com/artifact/com.mysql/mysql-connector-j // Connection JAVA to MySql Database <br> 
 
 # Database Connection :
-Change the HOST, PORT, USERNAME, and PASSWOR. If you want to fork this repository.
+Change the HOST, PORT, USERNAME, and PASSWORD. If you want to fork this repository.

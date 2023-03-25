@@ -2,11 +2,13 @@
   "Petrol Station": [
     {
       "No":1,
-      "Pertamina": ["Pertalite","Pertamax", "Pertamax Turbo"]
+      "Petrol Name" : "Pertamina",
+      "Petrol Type": ["Pertalite","Pertamax", "Pertamax Turbo"]
     },
     {
       "No": 2,
-      "Shell": ["Super", "V Power" ]
+      "Petrol Name" : "Shell",
+      "Petrol Type": ["Super", "V Power" ]
     }
   ]
 }

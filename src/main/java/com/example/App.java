@@ -1,14 +1,20 @@
 package com.example;
 
+import com.mysql.cj.xdevapi.JsonParser;
+
+import java.util.Objects;
 import java.util.Scanner;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.Instant;
+import java.io.FileReader;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class App {
-
     static Instant now = Instant.now();
     static Scanner input = new Scanner(System.in);;
 
@@ -25,6 +31,12 @@ public class App {
     static BigDecimal dayFuelCost;
 
     static String[] selectedAction = {"Exit","Insert Cost Petrol","Show Cost Petrol","Edit Cost Petrol","Delete Cost Petrol","Insert Price Petrol","Show Price Petrol","Edit Price Petrol","Delete Price Petrol","Export Data"};
+
+    static JSONParser parser = new JSONParser();
+
+    static JSONObject tempChoiceDataObject, tempPetrolCostPetrolObject;
+
+    static Object tempChoiceData ;
 
     public static void main(String[] args) {
         try {
@@ -91,19 +103,30 @@ public class App {
 
     // Insert Data
     static void insertDataPetrolCosts() {
+
         long startSecond = System.currentTimeMillis();
         try {
-            // ambil input dari user
-            System.out.println("Pilih pengisian stasiun bahan bakar: ");
-            System.out.println("1. Pertamina");
-            System.out.println("2. Shell");
-            System.out.print("Masukan Pilihan Anda : ");
+
+            tempChoiceData =  parser.parse(new FileReader("C:/Users/daffa/Documents/JavaCorner/Expenditure-Application-for-Fuel-Purchases/src/tempChoicePetrol.json"));
+            tempChoiceDataObject = (JSONObject) tempChoiceData;
+
+            JSONArray jsonArrayPetrolStation = (JSONArray) tempChoiceDataObject.get("Petrol Station");
+
+            // Take input from console
+            System.out.println("Here are the available fuel stations :");
+
+            for (int i = 0; i < jsonArrayPetrolStation.size(); i++) {
+                JSONObject petrolStation = (JSONObject) jsonArrayPetrolStation.get(i);
+                String petrolName = (String) petrolStation.get("Petrol Name");
+                System.out.println((i+1)+ ". " +petrolName);
+            }
+
+            System.out.print("Enter your choice : ");
             fuelStationChoice = input.nextInt();
 
             while (fuelStationChoice < 1 || fuelStationChoice > 2) {
                 System.out.println("\n");
-                System.out
-                        .println("Masukan Pilihan yang sudah disediakan dan Pilihlah pengisian stasiun bahan bakar: ");
+                System.out.println("Masukan Pilihan yang sudah disediakan dan Pilihlah pengisian stasiun bahan bakar: ");
                 System.out.println("1. Pertamina");
                 System.out.println("2. Shell");
                 System.out.print("Masukan Pilihan Anda : ");

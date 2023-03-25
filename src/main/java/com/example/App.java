@@ -24,9 +24,7 @@ public class App {
     static int fuelTypeChoice, fuelStationChoice;
     static BigDecimal dayFuelCost;
 
-
-
-    static String[] selectedAction = {"Insert Cost Petrol","Show Cost Petrol","Edit Cost Petrol","Delete Cost Petrol","Insert Price Petrol","Show Price Petrol","Edit Price Petrol","Delete Price Petrol","Export Data"};
+    static String[] selectedAction = {"Exit","Insert Cost Petrol","Show Cost Petrol","Edit Cost Petrol","Delete Cost Petrol","Insert Price Petrol","Show Price Petrol","Edit Price Petrol","Delete Price Petrol","Export Data"};
 
     public static void main(String[] args) {
         try {
@@ -41,21 +39,15 @@ public class App {
         }
     }
 
-
-
     // Show Menu
     static void showMenu() {
         System.out.println("\n========= MENU UTAMA =========");
-        System.out.println("1. Insert Data");
-        System.out.println("2. Show Data");
-        System.out.println("3. Edit Data");
-        System.out.println("4. Delete Data");
-        System.out.println("5. Insert New Data Fuel Station Price");
-        System.out.println("6. Excel Report");
-        System.out.println("0. Keluar");
-        System.out.print("\n");
+        System.out.println("\n");
+        for (int i = 0; i < selectedAction.length ; i++) {
+            System.out.println(i+". "+selectedAction[i]);
+        }
+
         System.out.print("PILIHAN> ");
-        // input.
         try {
             selected = input.nextInt();
             switch (selected) {

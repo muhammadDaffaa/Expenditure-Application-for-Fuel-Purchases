@@ -7,3 +7,11 @@ This project already uses preparedstatement for MySql Query. Over time this proj
 
 # Database Connection :
 Change the HOST, PORT, USERNAME, and PASSWORD. If you want to fork this repository.
+
+```JAVA
+    public static String USERNAME = System.getenv("oci_user_sql");
+    public static String PASSWORD = System.getenv("oci_password_sql");
+    public static int PORT = 3306;
+    public static String DATABASE = "operational";
+    public static String HOST = System.getenv("oci_host_sql");
+```
